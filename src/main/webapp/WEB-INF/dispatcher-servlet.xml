@@ -27,7 +27,7 @@
 		<property name="prefix" value="/WEB-INF/xsl/"/>
 		<property name="suffix" value=".xsl"/>
 		<property name="uriResolver">
-			<bean class="tw.org.w3c.URIResolver">
+			<bean class="tw.org.w3.URIResolver">
 				<property name="prefix" value="/WEB-INF/xsl/"/>
 			</bean>
 		</property>
