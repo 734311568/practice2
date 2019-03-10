@@ -61,8 +61,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>tw.org.w3c</groupId>
-			<artifactId>utilities</artifactId>
+			<groupId>com.bigbigmall</groupId>
+			<artifactId>maven</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
