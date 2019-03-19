@@ -1,8 +1,6 @@
 package com.bigbigmall.xiamen.controller;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,9 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 /**
- * @auther 7343 
+ * @auther 7343
  */
 @Controller
 @RequestMapping("/")
@@ -46,31 +45,39 @@ public class WelcomeController {
                 Element comments = document.createElement("comments");
                 Element comment = document.createElement("comment");
                 Element id = document.createElement("id");
-                id.setTextContent("defad05a-0eb1-4545-b4aa-39460f174fbc");
+
+                id.appendChild(document.createTextNode("defad05a-0eb1-4545-b4aa-39460f174fbc"));
                 Element content = document.createElement("content");
-                content.setTextContent("這是一篇好文章阿");
+                //content.setTextContent();
+                content.appendChild(document.createTextNode("這是一篇好文章阿"));
                 Element who = document.createElement("who");
                 Element nickname = document.createElement("nickname");
                 Element pcid = document.createElement("id");
-                pcid.setTextContent("7f84cc84-bb50-4cdf-8578-ef2827d35726");
-                nickname.setTextContent("pc");
+                Text createTextNode = document.createTextNode("7f84cc84-bb50-4cdf-8578-ef2827d35726");
+                pcid.appendChild(createTextNode);
+                nickname.appendChild(document.createTextNode("pc"));
 
                 who.appendChild(nickname);
                 who.appendChild(pcid);
                 comment.appendChild(id);
                 comment.appendChild(content);
                 comment.appendChild(who);
+
                 //第一个故事的comment2
                 Element comment2 = document.createElement("comment");
                 Element id2 = document.createElement("id");
-                id2.setTextContent("8ee5d256-a4e9-4c67-a5d0-0699d9b0cbd7");
+                id2.appendChild(document.createTextNode("8ee5d256-a4e9-4c67-a5d0-0699d9b0cbd7"));
+
                 Element content2 = document.createElement("content");
-                content2.setTextContent("家惠什麼時候要開始減肥呀");
+
+                content2.appendChild(document.createTextNode("家惠什麼時候要開始減肥呀"));
                 Element who2 = document.createElement("who");
                 Element nickname2 = document.createElement("nickname");
-                nickname2.setTextContent("pc");
+
+                nickname2.appendChild(document.createTextNode("pc"));
                 Element id3 = document.createElement("id");
-                id3.setTextContent("7f84cc84-bb50-4cdf-8578-ef2827d35726");
+
+                id3.appendChild(document.createTextNode("7f84cc84-bb50-4cdf-8578-ef2827d35726"));
                 who2.appendChild(nickname2);
                 who2.appendChild(id3);
                 comment2.appendChild(who2);
@@ -79,12 +86,14 @@ public class WelcomeController {
                 Element emotions = document.createElement("emotions");
                 emotions.setTextContent("0");
                 Element postedAt = document.createElement("postedAt");
-                postedAt.setTextContent("2014-02-11T00:00:00+08:00");
+
+                postedAt.appendChild(document.createTextNode("2014-02-11T00:00:00+08:00"));
                 Element author = document.createElement("author");
                 Element nickname1 = document.createElement("nickname");
                 nickname1.setTextContent("redan");
                 Element authorId = document.createElement("id");
-                authorId.setTextContent("e4b6a337-6647-4521-ac9a-c4e0a3853626");
+
+                authorId.appendChild(document.createTextNode("e4b6a337-6647-4521-ac9a-c4e0a3853626"));
                 author.appendChild(nickname1);
                 author.appendChild(authorId);
                 comments.appendChild(comment);
@@ -95,9 +104,11 @@ public class WelcomeController {
                 story1.appendChild(author);
                 Element story2 = document.createElement("story");
                 Element idT = document.createElement("id");
-                idT.setTextContent("190cc757-7a0e-4712-97c9-bf5f77fd5a8e");
+                idT.appendChild(document.createTextNode("190cc757-7a0e-4712-97c9-bf5f77fd5a8e"));
+
                 Element contentT = document.createElement("content");
-                contentT.setTextContent("this is content 這是一篇文章");
+
+                contentT.appendChild(document.createTextNode("this is content 這是一篇文章"));
                 story1.appendChild(idT);
                 story1.appendChild(contentT);
 
@@ -108,12 +119,15 @@ public class WelcomeController {
                 Element emotions2 = document.createElement("emotions");
                 emotions2.setTextContent("0");
                 Element postedAt2 = document.createElement("postedAt");
-                postedAt2.setTextContent(">2019-01-30 03:08:30.556067");
+
+                postedAt2.appendChild(document.createTextNode("2019-01-30 03:08:30.556067"));
                 Element author3 = document.createElement("author");
                 Element hid = document.createElement("id");
-                hid.setTextContent("fdb53388-243b-11e9-b2d7-23d188ab349e");
+
+                hid.appendChild(document.createTextNode("fdb53388-243b-11e9-b2d7-23d188ab349e"));
                 Element nickname3 = document.createElement("nickname");
-                nickname3.setTextContent("阿惠");
+                nickname3.appendChild(document.createTextNode("阿惠"));
+
                 author3.appendChild(hid);
                 author3.appendChild(nickname3);
                 story2.appendChild(emotions2);
@@ -121,30 +135,37 @@ public class WelcomeController {
                 story2.appendChild(postedAt2);
                 story2.appendChild(author3);
                 Element idL = document.createElement("id");
-                idL.setTextContent("72ff2337-1b0b-473c-8120-6ff028632806");
+                idL.appendChild(document.createTextNode("72ff2337-1b0b-473c-8120-6ff028632806"));
+
                 Element contentL = document.createElement("content");
-                contentL.setTextContent("路，就是一條直直的。認同請按讚，不認同請分享");
+                contentL.appendChild(document.createTextNode("路，就是一條直直的。認同請按讚，不認同請分享"));
+
                 story2.appendChild(idL);
                 story2.appendChild(contentL);
 
                 //第三故事
                 Element emotions3 = document.createElement("emotions");
-                emotions3.setTextContent("0");
-                Element postedAt3 = document.createElement("postedAt");
-                postedAt3.setTextContent("2019-01-30 03:08:54.812136");
 
+                emotions3.appendChild(document.createTextNode("0"));
+                Element postedAt3 = document.createElement("postedAt");
+
+                postedAt3.appendChild(document.createTextNode("2019-01-30 03:08:54.812136"));
                 Element author4 = document.createElement("author");
 
                 Element nickname4 = document.createElement("nickname");
-                nickname4.setTextContent("生仔");
+
+                nickname4.appendChild(document.createTextNode("生仔"));
                 Element id4 = document.createElement("id");
-                id4.setTextContent("f45f0aa2-243b-11e9-b2d7-7339b94259f1");
+
+                id4.appendChild(document.createTextNode("f45f0aa2-243b-11e9-b2d7-7339b94259f1"));
                 author4.appendChild(nickname4);
                 author4.appendChild(id4);
                 Element id5 = document.createElement("id");
-                id5.setTextContent("5bc82c97-14e7-44ad-91ea-8941a12eae43");
+
+                id5.appendChild(document.createTextNode("5bc82c97-14e7-44ad-91ea-8941a12eae43"));
                 Element content5 = document.createElement("content");
-                content5.setTextContent("累、累、累！");
+
+                content5.appendChild(document.createTextNode("累、累、累！"));
                 story3.appendChild(emotions3);
                 story3.appendChild(postedAt3);
                 story3.appendChild(author4);
@@ -162,165 +183,123 @@ public class WelcomeController {
                 document.appendChild(documentElement);
                 TransformerFactory.newInstance().newTransformer().transform(new DOMSource(document), new StreamResult(response.getOutputStream()));
         }
-        @RequestMapping("/Dom")
-        @ResponseBody
-         void index2(HttpServletResponse response) throws ParserConfigurationException, TransformerConfigurationException, IOException, TransformerException {
-              
-                //创建的文档解析器
-                Document newDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-                //创建根节点
-                Element documentElement = newDocument.createElement("document");
-                //文档追加根节点
-                newDocument.appendChild(documentElement);
 
-                //创建客户端执行get请求
-                CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("https://redan-api.herokuapp.com/"));
-                //请求过后返回数据
+        @RequestMapping("/showXML")
+        public void getView(HttpServletResponse response) throws ParserConfigurationException, IOException, TransformerConfigurationException, TransformerException {
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                Element documentElement = doc.createElement("document");
+                doc.appendChild(documentElement);
+
+                CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("https://redan-api.herokuapp.com/story/"));
                 HttpEntity entity = response1.getEntity();
-                //如果的响应数据不为空的情况的,执行
                 if (null != entity) {
-                        //对响应数据进行编码格式的设置使用数据实体的工具
                         String str = EntityUtils.toString(entity, "UTF-8");
-                        //针对以下的实体进行操作,拿到json数据之后进行一下的
-                        JSONObject jsonObject = new JSONObject(str).getJSONObject("_links");
-                        //遍历json对象
-                    
-                        Iterator<String> keys = jsonObject.keys();
-                        while (keys.hasNext()) {
-                                    
-                                String next1 = keys.next();
-                                Element createElement = newDocument.createElement(next1);
-                                JSONObject jsonObject1 = jsonObject.getJSONObject(next1);
-                                System.out.println("第一层的所有的key\t" + next1 + "第一层的所有值\t" + jsonObject1);
-                                Iterator<String> keys1 = jsonObject1.keys();
-                                while (keys1.hasNext()) {
-                                        String next2 = keys1.next();
-                                        Element createElement1 = newDocument.createElement(next2);
-                                        String get = jsonObject1.get(next2).toString();
-                                        createElement1.setTextContent(get);
-                                        System.out.println("第二次的所有的key\t"+next2+"\t第二层的\t"+get);
-                                       createElement.appendChild(createElement1);
-                                }
-                                  documentElement.appendChild(createElement);
-                        }
-                      
+                        Element createStories = doc.createElement("stories");
+                        // story
+                        JSONArray jsonArrayResult = new JSONObject(str).getJSONArray("result");
+                        Element createResult = doc.createElement("story");
+                        JSONObject json = getJson(jsonArrayResult);
+
+                        //comments
+                        JSONArray jsonComments = json.getJSONArray("comments");
+                        Element comments = doc.createElement("comments");
+                        //comments的第一对象
+                        JSONObject commentsObject = jsonComments.getJSONObject(0);
+
+                        Element comment = doc.createElement("comment");
+                        String commentsGetId1 = commentsObject.get("id").toString();
+                        comment.setAttribute("id", commentsGetId1);
+                        Element Content1 = doc.createElement("content");
+                        String contentVaules = commentsObject.get("content").toString();
+                        Content1.appendChild(doc.createTextNode(contentVaules));
+
+                        comment.appendChild(Content1);
+                        Element who = doc.createElement("who");
+
+                        //who的对象
+                        JSONObject jsonObjectWho = commentsObject.getJSONObject("who");
+                        String whoId = jsonObjectWho.get("id").toString();
+                        String nicknameValue = jsonObjectWho.getString("nickname");
+                        who.setAttribute("id", whoId);
+                        who.setAttribute("nickname", nicknameValue);
+
+                        comment.appendChild(who);
+                        comments.appendChild(comment);
+
+                        //comments的第二个对象
+                        JSONObject commentsObject2 = jsonComments.getJSONObject(1);
+                        Element comment2 = doc.createElement("comment");
+                        String att = commentsObject2.getString("id");
+                        Element commentContent2 = doc.createElement("content");
+                        String content = commentsObject2.getString("content");
+                        commentContent2.appendChild(doc.createTextNode(content));
+                        comment2.setAttribute("id", att);
+                        comment2.appendChild(commentContent2);
+
+                        Element elementWho = doc.createElement("who");
+                        JSONObject who2 = commentsObject2.getJSONObject("who");
+                        String nickname2 = who2.getString("nickname");
+                        String stringId = who2.getString("id");
+                        elementWho.setAttribute("id", stringId);
+                        elementWho.setAttribute("nickname", nickname2);
+                        comment2.appendChild(elementWho);
+                        comments.appendChild(comment);
+                        comments.appendChild(comment2);
+
+                        //id
+                        String getId3 = json.get("id").toString();
+                        createResult.setAttribute("id", getId3);
+                        //emotions
+                        String emotionsValue = json.get("emotions").toString();
+                        createResult.setAttribute("emotions", emotionsValue);
+                        //postedAt
+                        String postedAtValue = json.get("postedAt").toString();
+                        createResult.setAttribute("postedAt", postedAtValue);
+                        //author
+                        Element createAuthor = doc.createElement("author");
+                        JSONObject authorObject = json.getJSONObject("author");
+                        String nicknameValue2 = authorObject.get("nickname").toString();
+                        String getId = authorObject.get("id").toString();
+                        createAuthor.setAttribute("id", getId);
+                        createAuthor.setAttribute("nickname", nicknameValue2);
+                        comments.appendChild(comment);
+                        comments.appendChild(comment2);
+
+                        String commentsId = json.get("id").toString();
+                        Element createElementContent = doc.createElement("content");
+                        String commentsContent = json.get("content").toString();
+                        createElementContent.appendChild(doc.createTextNode(commentsContent));
+                        comments.setAttribute("id", commentsId);
+                        comments.appendChild(createElementContent);
+                        createResult.appendChild(comments);
+                        createResult.appendChild(createAuthor);
+
+                        //status
+                        Element createStatus = doc.createElement("status");
+                        String statusValue = new JSONObject(str).get("status").toString();
+                        createStatus.setTextContent(statusValue);
+                        createStories.appendChild(createResult);
+                        documentElement.appendChild(createStories);
+                        documentElement.appendChild(createStatus);
 
                 }
+                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc),  new StreamResult(response.getOutputStream()));
 
-              
-
-           
-                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(newDocument), new StreamResult(response.getOutputStream()));
         }
-         @RequestMapping("/DomViwe")
-        @ResponseBody
-         void index3(HttpServletResponse response) throws ParserConfigurationException, TransformerConfigurationException, IOException, TransformerException {
-              
-            
-                //创建的文档解析器
-                Document newDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-                //创建根节点
-                Element documentElement = newDocument.createElement("document");
-                //文档追加根节点
-                newDocument.appendChild(documentElement);
-
-                //创建客户端执行get请求
-                CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("https://redan-api.herokuapp.com/profile/emotions"));
-                //请求过后返回数据
-                HttpEntity entity = response1.getEntity();
-                if (null != entity) {
-                        //指定编码格式
-                        String string = EntityUtils.toString(entity, "UTF-8");
-                        JSONObject jsonObject = new JSONObject(string).getJSONObject("alps");
-                        //获取的jsonObject的所有key
-                        Set<String> keySet = jsonObject.keySet();
-                        Iterator<String> iterator = keySet.iterator();
-                        while (iterator.hasNext()) {
-                                String next = iterator.next();
-                                String toString = jsonObject.get(next).toString();
-                                //创建标签元素
-                                Element createElement = newDocument.createElement(next);
-                                //这是alps的两个子标签
-
-                                System.out.println("alp的两个子标签\t" + next + "\talp的两个子标签的值\t" + toString);
-                                //是文本的情况下,直接创建标签和追加文本值
-                                if (toString.equals("version")) {
-                                        String toString1 = jsonObject.get(next).toString();
-                                        createElement.setTextContent(toString1);
-                                } //是json数组的情况下
-                                else if (!toString.equals("version")) {
-                                        JSONArray jsonArray = jsonObject.getJSONArray("descriptor");
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                                //拿到所有json数组元素
-                                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                                //所有的key的集合
-                                                Iterator<String> keys = jsonObject1.keys();
-                                                while (keys.hasNext()) {
-                                                        String next1 = keys.next();
-                                                        String toString1 = jsonObject1.get(next1).toString();
-
-                                                        //创建标签元素
-                                                        Element createElement1 = newDocument.createElement(next1);
-                                                        //createElement1.setTextContent(toString1);
-
-                                                        System.out.println("拿到第二层的所有\t" + next1 + "\t拿到第二层的所有\t" + toString1);
-                                                        //在第二层里面是文本的就直接添加文本
-                                                        if (!next1.equals("descriptor")) {
-                                                                //descriptor直接追究descriptor里面的键值对
-                                                                createElement1.setTextContent(toString1);
-                                                                System.out.println("没有到这里&&&&&&&&&&&&&&&&&&&在第二层里面是文本的&&&&&&&&&&&&&&&&&&&");
-                                                        }
-                                                        if (next1.equals("descriptor")) {
-
-                                                                JSONArray jsonArray1 = jsonObject1.getJSONArray("descriptor");
-
-                                                                for (int j = 0; j < jsonArray1.length(); j++) {
-
-                                                                        JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
-                                                                        Iterator<String> keys1 = jsonObject2.keys();
-                                                                        while (keys1.hasNext()) {
-                                                                                String next2 = keys1.next();
-                                                                                String string1 = jsonObject2.get(next2).toString();
-                                                                                //创建节点
-                                                                                Element createElement2 = newDocument.createElement(next2);
-
-                                                                                System.out.println("拿到第三**********************层的所有\t" + next2 + "\t拿到第三********************层的所有\t" + string1);
-                                                                                //在第四层是文本的情况
-                                                                                if (!next2.equals("doc")) {
-                                                                                        createElement2.setTextContent(string1);
-                                                                                        System.out.println("第四层的是文本的情况");
-
-                                                                                } else if (next2.equals("doc")) {
-                                                                                        JSONObject jsonObject3 = jsonObject2.getJSONObject("doc");
-                                                                                        Iterator<String> keys2 = jsonObject3.keys();
-                                                                                        while (keys2.hasNext()) {
-                                                                                                String next3 = keys2.next();
-                                                                                                String string2 = jsonObject3.getString(next3);
-                                                                                                Element createElement3 = newDocument.createElement(next3);
-                                                                                                createElement3.setTextContent(string2);
-                                                                                                System.out.println("第四层的######key\t" + next3 + "\t第四层的######值\t" + string2);
-                                                                                                createElement2.appendChild(createElement3);
-                                                                                        }
-
-                                                                                }
-                                                                                //追加节点
-                                                                                createElement1.appendChild(createElement2);
-                                                                        }
-                                                                }
-                                                        }
-                                                        createElement.appendChild(createElement1);
-
-                                                }
-
-                                        }
-                                }
-
-                                documentElement.appendChild(createElement);
-                        }
-
+        /**
+         * 遍历json 数组返回json对象
+         * @param jSONArray
+         * @return
+         */
+        public  JSONObject getJson(JSONArray jSONArray) {
+                JSONObject object = null;
+                for (int i = 0; i < jSONArray.length(); i++) {
+                        object = jSONArray.getJSONObject(i);
                 }
 
-           
-                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(newDocument), new StreamResult(response.getOutputStream()));
+                return object;
+
         }
+
+
 }
