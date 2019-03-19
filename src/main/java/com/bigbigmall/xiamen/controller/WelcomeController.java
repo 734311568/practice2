@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -181,7 +182,10 @@ public class WelcomeController {
                 stories.appendChild(story3);
                 documentElement.appendChild(stories);
                 document.appendChild(documentElement);
-                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(document), new StreamResult(response.getOutputStream()));
+                //更新dom保持
+                TransformerFactory newTransformer = TransformerFactory.newInstance();
+                Transformer transformer = newTransformer.newTransformer();
+               transformer.transform(new DOMSource(document),  new StreamResult(response.getOutputStream()));
         }
 
         @RequestMapping("/showXML")
@@ -275,16 +279,16 @@ public class WelcomeController {
                         createResult.appendChild(createAuthor);
 
                         //status
-                        Element createStatus = doc.createElement("status");
-                        String statusValue = new JSONObject(str).get("status").toString();
-                        createStatus.setTextContent(statusValue);
+                          String statusValue = new JSONObject(str).get("status").toString();
+                        documentElement.setAttribute("status", statusValue);
                         createStories.appendChild(createResult);
                         documentElement.appendChild(createStories);
-                        documentElement.appendChild(createStatus);
+                        
 
                 }
-                TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc),  new StreamResult(response.getOutputStream()));
-
+               TransformerFactory newTransformer = TransformerFactory.newInstance();
+                Transformer transformer = newTransformer.newTransformer();
+               transformer.transform(new DOMSource(doc),  new StreamResult(response.getOutputStream()));
         }
         /**
          * 遍历json 数组返回json对象
