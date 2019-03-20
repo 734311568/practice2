@@ -1,5 +1,6 @@
 package com.bigbigmall.xiamen.controller;
 
+import com.sun.javafx.scene.text.TextLayout;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -185,7 +188,7 @@ public class WelcomeController {
                 //更新dom保持
                 TransformerFactory newTransformer = TransformerFactory.newInstance();
                 Transformer transformer = newTransformer.newTransformer();
-               transformer.transform(new DOMSource(document),  new StreamResult(response.getOutputStream()));
+                transformer.transform(new DOMSource(document), new StreamResult(response.getOutputStream()));
         }
 
         @RequestMapping("/showXML")
@@ -279,23 +282,24 @@ public class WelcomeController {
                         createResult.appendChild(createAuthor);
 
                         //status
-                          String statusValue = new JSONObject(str).get("status").toString();
+                        String statusValue = new JSONObject(str).get("status").toString();
                         documentElement.setAttribute("status", statusValue);
                         createStories.appendChild(createResult);
                         documentElement.appendChild(createStories);
-                        
 
                 }
-               TransformerFactory newTransformer = TransformerFactory.newInstance();
+                TransformerFactory newTransformer = TransformerFactory.newInstance();
                 Transformer transformer = newTransformer.newTransformer();
-               transformer.transform(new DOMSource(doc),  new StreamResult(response.getOutputStream()));
+                transformer.transform(new DOMSource(doc), new StreamResult(response.getOutputStream()));
         }
+
         /**
          * 遍历json 数组返回json对象
+         *
          * @param jSONArray
          * @return
          */
-        public  JSONObject getJson(JSONArray jSONArray) {
+        public JSONObject getJson(JSONArray jSONArray) {
                 JSONObject object = null;
                 for (int i = 0; i < jSONArray.length(); i++) {
                         object = jSONArray.getJSONObject(i);
@@ -305,5 +309,34 @@ public class WelcomeController {
 
         }
 
+        @RequestMapping(value = "/json", method = RequestMethod.GET)
+        @ResponseBody
+        public String getAjax(@RequestParam(value = "minimum", required = false) Integer minimum, @RequestParam(value = "maximum") Integer maximum) {
+                Integer num = null;
+                StringBuffer sb = new StringBuffer();
+                boolean falg;
+                for (int i = minimum; i <= maximum; i++) {
+                        if (i == 1 || (i % 2 == 0 && i != 2)) {
+                                continue;
+                        }
+                        falg = true;
+                        for (int j = 2; j < i; j++) {
+                                if (i % j == 0) {
+                                        falg = false;
+                                        break;
+                                }
+
+                        }
+                        if (falg) {
+                                num = i;
+                                sb.append(num.toString());
+                                sb.append("\t");
+                        }
+
+                }
+
+                return sb.toString();
+
+        }
 
 }

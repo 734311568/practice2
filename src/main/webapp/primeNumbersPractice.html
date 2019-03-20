@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<HTML>
+        <HEAD>
+                <META charset="UTF-8">
+                <META name="viewport" content="width=device-width, initial-scale=1.0">
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                <TITLE>Prime Numbers 练习</TITLE>
+        </HEAD>
+        <BODY>
+                <iframe  id="submitFrame" style="display: none;width:0; height:0" name="submitFrame"  src="about:blank"></iframe>
+                <FIELDSET>
+                        <LEGEND>列出两整数之间的所有素数</LEGEND>
+                        <FORM action="saveTreeNode"    target="submitFrame" >
+                                <TABLE>
+                                        <TBODY>
+                                                <TR>
+                                                        <TH>
+                                                                <LABEL for="minimum">Minimum</LABEL>
+                                                        </TH>
+                                                        <TD>
+                                                                <INPUT id="minimum" name="minimum" required="" type="number">
+                                                        </TD>
+                                                        <TH>
+                                                                <LABEL for="maximum">Maximum</LABEL>
+                                                        </TH>
+                                                        <TD>
+                                                                <INPUT id="maximum" name="maximum" required="" type="number">
+                                                        </TD>
+                                                </TR>
+                                        </TBODY>
+                                </TABLE>
+                                <DIV id="div"   style="padding:5px" >
+                                        <INPUT type="submit" value="送出">
+                                        <INPUT type="reset" value="清空">
+                                </DIV>
+                                <TEXTAREA id="text" style="width:640px;height:480px" cols="1" readonly="" rows="1"></TEXTAREA>
+			</FORM>
+		</FIELDSET>
+               
+                <SCRIPT>
+
+                         $("FORM").submit(function CheckPost() {
+                                        var minimum = $("#minimum").val();
+                                        var maximum = $("#maximum").val();
+                                        $.ajax({
+                                                type: "get",
+                                                url: "json",
+                                                data: {"minimum": minimum, "maximum": maximum},
+                                                 contentType:"application/json;charset=UTF-8",
+                                                success: function (data) {
+                                                   
+                                                        $("#text").text(data );
+                                                }
+                                                
+                                        });
+                                        
+                                      
+                                });
+                </SCRIPT>
+	</BODY>
+</HTML>
