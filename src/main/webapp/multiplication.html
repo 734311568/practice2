@@ -9,50 +9,89 @@ and open the template in the editor.
                 <title>九九乘法表练习</title>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-               
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         </head>
         <body id="yy">
                 <div id ="div"></div>
                 <script>
-                      //  $(document).ready(function{});
-                        window.onload = function () {
+                        $(document).ready(function () {
+
                                 var doc = document.createElement("table");
                                 doc.setAttribute('border', '1');
-
-
-
-
                                 $.post("for", {}, function (data) {
-                                        var tr = document.createElement("tr");
 
                                         var objson = JSON.parse(data);
+                                        for (var i = 0; i <= objson.length - 8; i++) {
 
-                                        for (var i = 0; i < objson.length-9; i++) {
-                                                var td = document.createElement("td");
-                                                $(td).html(objson[i][i]);
+
+
+                                                if (i <= 8) {
+                                                        for (var i = 0; i <= 8; i++) {
+                                                                var td1 = document.createElement("td");
+                                                                var td2 = document.createElement("td");
+                                                                var td3 = document.createElement("td");
+                                                                var tr = document.createElement("tr");
+                                                                var td = document.createElement("td");
+                                                                $(td).html(objson[i]["k"]);
+                                                                $(td1).html(objson[i + 9]["k"]);
+                                                                $(td2).html(objson[i + 18]["k"]);
+                                                                $(td3).html(objson[i + 27]["k"]);
+                                                                $(tr).append(td);
+                                                                $(tr).append(td1);
+                                                                $(tr).append(td2);
+                                                                $(tr).append(td3);
+                                                                $(doc).append(tr);
+                                                                $("#yy").append(doc);
+                                                        }
+
+                                                } else if (i >  36 && i < 44) {
+                                                          for (var i = 36; i <= 44; i++) {
+                                                                  
+                                                                 var td5 = document.createElement("td");
+                                                                var td6 = document.createElement("td");
+                                                                var td7 = document.createElement("td");
+                                                                var tr1 = document.createElement("tr");
+                                                                var td4 = document.createElement("td");
+                                                                $(td4).html(objson[i]["k"]);
+                                                                $(td5).html(objson[i + 9]["k"]);
+                                                                $(td6).html(objson[i + 18]["k"]);
+                                                                $(td7).html(objson[i + 27]["k"]);
+                                                                $(tr1).append(td4);
+                                                                $(tr1).append(td5);
+                                                                $(tr1).append(td6);
+                                                                $(tr1).append(td7);
+                                                                $(doc).append(tr1);
+                                                                $("#yy").append(doc);
+                               
+                                                                }
+
+
+
+
+
+
+
+                                }
+
                                                 
-                                                $(tr).append($(td));
-                                                $(doc).append($(tr));
-                                                $("#yy").append($(doc));
+                                                
+                                                
+                                                
+                                                
+                                                
+
+
 
 
                                         }
 
-
-
-
-
                                 });
-
-
-                        };
-
-
+                        });
 
 
                 </script>
-                  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
         </body>
-       
+
 </html>
