@@ -1,6 +1,7 @@
 package com.bigbigmall.xiamen.controller;
 
 import com.sun.javafx.scene.text.TextLayout;
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -339,4 +340,31 @@ public class WelcomeController {
 
         }
 
+        @RequestMapping(value = "/for")
+        @ResponseBody
+        public String getFor(HttpServletResponse response) throws IOException {
+                StringBuffer sb = new StringBuffer();
+
+                String kk = "k";
+
+                String stu = "";
+                for (int i = 2; i <= 9; i++) {
+                        for (int j = 1; j <= i; j++) {
+                                System.out.print(j + "*" + i + "=" + i * j + "\t");
+                                if (i == 2 && j == 1) {
+                                        stu += "[" + "{" + '"' + i + '"' + ":" + '"' + j + "*" + i + "=" + i * j + '"' + "},";
+                                } else if (i == 9 && j == 9) {
+                                       
+                                        stu += "{" + '"' + i + '"' + ":" + '"' + j + "*" + i + "=" + i * j + '"' + "}" + "]";
+                                } else {
+                                        stu += "{" + '"' + i + '"' + ":" + '"' + j + "*" + i + "=" + i * j + '"' + "},";
+                                }
+
+                        }
+                        System.out.println(" ");
+
+                }
+                return stu;
+
+        }
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+        <head>
+                <title>九九乘法表练习</title>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+               
+
+        </head>
+        <body id="yy">
+                <div id ="div"></div>
+                <script>
+                      //  $(document).ready(function{});
+                        window.onload = function () {
+                                var doc = document.createElement("table");
+                                doc.setAttribute('border', '1');
+
+
+
+
+                                $.post("for", {}, function (data) {
+                                        var tr = document.createElement("tr");
+
+                                        var objson = JSON.parse(data);
+
+                                        for (var i = 0; i < objson.length-9; i++) {
+                                                var td = document.createElement("td");
+                                                $(td).html(objson[i][i]);
+                                                
+                                                $(tr).append($(td));
+                                                $(doc).append($(tr));
+                                                $("#yy").append($(doc));
+
+
+                                        }
+
+
+
+
+
+                                });
+
+
+                        };
+
+
+
+
+                </script>
+                  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        </body>
+       
+</html>
