@@ -20,13 +20,9 @@ and open the template in the editor.
                                 var doc = document.createElement("table");
                                 doc.setAttribute('border', '1');
                                 $.post("for", {}, function (data) {
-
                                         var objson = JSON.parse(data);
                                         for (var i = 0; i <= objson.length - 8; i++) {
-
-
-
-                                                if (i <= 8) {
+                                        if (i <= 8) {
                                                         for (var i = 0; i <= 8; i++) {
                                                                 var td1 = document.createElement("td");
                                                                 var td2 = document.createElement("td");
@@ -44,7 +40,6 @@ and open the template in the editor.
                                                                 $(doc).append(tr);
                                                                 $("#yy").append(doc);
                                                         }
-
                                                 } else if (i >  36 && i < 44) {
                                                           for (var i = 36; i <= 44; i++) {
                                                                   
@@ -66,13 +61,7 @@ and open the template in the editor.
                                
                                                                 }
 
-
-
-
-
-
-
-                                }
+                                } 
 
                                                 
                                                 
