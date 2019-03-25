@@ -1,8 +1,9 @@
 package com.bigbigmall.xiamen.controller;
 
-import com.sun.javafx.scene.text.TextLayout;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,7 +35,14 @@ import org.w3c.dom.Text;
 @Controller
 @RequestMapping("/")
 public class WelcomeController {
-
+        /**
+         * js创建文本
+         * @param response
+         * @throws ParserConfigurationException
+         * @throws TransformerConfigurationException
+         * @throws IOException
+         * @throws TransformerException 
+         */
         @RequestMapping("/")
         @ResponseBody
         void index(HttpServletResponse response) throws ParserConfigurationException, TransformerConfigurationException, IOException, TransformerException {
@@ -309,7 +317,13 @@ public class WelcomeController {
                 return object;
 
         }
-
+        /**
+         * 两个之间的所有的素数
+         *  3月20日
+         * @param minimum
+         * @param maximum
+         * @return 
+         */
         @RequestMapping(value = "/json", method = RequestMethod.GET)
         @ResponseBody
         public String getAjax(@RequestParam(value = "minimum", required = false) Integer minimum, @RequestParam(value = "maximum") Integer maximum) {
@@ -339,11 +353,16 @@ public class WelcomeController {
                 return sb.toString();
 
         }
-
+        /**
+         * 处理九九乘法表
+         * 3月21号  
+         * @param response
+         * @return
+         * @throws IOException 
+         */
         @RequestMapping(value = "/for")
         @ResponseBody
         public String getFor(HttpServletResponse response) throws IOException {
-                StringBuffer sb = new StringBuffer();
 
                 String kk = "k";
 
@@ -352,22 +371,22 @@ public class WelcomeController {
                         for (int j = 1; j <= 9; j++) {
                                 System.out.print(j + "*" + i + "=" + i * j + "\t");
                                 if (i == 2 && j == 1) {
-                                        if (j==1&&( i == 2 || i == 3 || i == 5 || i == 7)) {
-                                                stu += "[" + "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" +"<span style='color:red'>"+ i * j +"</span>"+ '"' + "},";
+                                        if (j == 1 && (i == 2 || i == 3 || i == 5 || i == 7)) {
+                                                stu += "[" + "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" + "<span style='color:red'>" + i * j + "</span>" + '"' + "},";
                                         } else {
                                                 stu += "[" + "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "},";
                                         }
 
                                 } else if (i == 9 && j == 9) {
-                                         
+
                                         stu += "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "}" + "]";
                                 } else {
-                                        if (j==1&&( i == 2 || i == 3 || i == 5 || i == 7)) {
-                                                stu +="{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" +"<span style='color:red'>"+ i * j +"</span>"+ '"' + "},";
+                                        if (j == 1 && (i == 2 || i == 3 || i == 5 || i == 7)) {
+                                                stu += "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" + "<span style='color:red'>" + i * j + "</span>" + '"' + "},";
                                         } else {
                                                 stu += "{" + '"' + kk + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "},";
                                         }
-                                        
+
                                 }
 
                         }
@@ -376,5 +395,111 @@ public class WelcomeController {
                 }
                 return stu;
 
+        }
+        /**
+         * 把九九乘法表转换成XSLT
+         * 3月24号
+         * @param response
+         * @param request
+         * @return
+         * @throws IOException 
+         */
+        @RequestMapping(value = "/showjson")
+
+        public String getForJson(HttpServletResponse response, HttpServletRequest request) throws IOException {
+
+                JSONObject json = new JSONObject();
+
+                String stu = "[";
+                String ks = "k";
+                String kk = "kv";
+                String key = "y";
+                for (int i = 1; i <= 9; i++) {
+                        stu += "[";
+                        for (int j = 2; j <= 5; j++) {
+                                if (j == 5) {
+                                        stu += "{" + '"' + (ks + j) + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "}";
+                                } else {
+                                        stu += "{" + '"' + (ks + j) + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "},";
+                                }
+
+                                System.out.print(i + "*" + j + "=" + i * j + "\t");
+
+                        }
+                        System.out.println();
+                        stu += "],";
+                }
+               
+                for (int i = 1; i <= 9; i++) {
+                        stu += "[";
+                        for (int j = 6; j <= 9; j++) {
+                                if (j == 9) {
+                                        stu += "{" + '"' + (ks + (j-4)) + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "}";
+                                } else {
+                                        stu += "{" + '"' + (ks + (j-4)) + '"' + ":" + '"' + i + "*" + j + "=" + i * j + '"' + "},";
+                                }
+
+                                System.out.print(i + "*" + j + "=" + i * j + "\t");
+
+                        }
+                        if (i == 9) {
+                                stu += "]";
+                        } else {
+                                stu += "],";
+                        }
+
+                        System.out.println();
+
+                }
+                stu += "]";
+                json.put(key, stu);
+                request.getSession().setAttribute("stu", json.toString());
+                return "forward:/XMLShow";
+
+        }
+
+        @RequestMapping(value = "/XMLShow")
+        public void getshowXML(HttpServletResponse response, HttpServletRequest request) throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException {
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                Element documentElement = doc.createElement("document");
+                doc.appendChild(documentElement);
+                System.out.println("进来了吗");
+                String attribute = (String) request.getSession().getAttribute("stu");
+                //外层数组
+                String stringKey = new JSONObject(attribute).getString("y");
+                JSONArray jsonArray = new JSONArray(stringKey);
+                Element keysElement = doc.createElement("keys");
+
+                //最外的json数组
+                for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONArray jsonArray1 = jsonArray.getJSONArray(i);
+                        Element keyElement = doc.createElement("key");
+                        System.out.println("jsonArray1:" + jsonArray1);
+                        for (int j = 0; j < jsonArray1.length(); j++) {
+                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
+
+                                Iterator<String> keys = jsonObject.keys();
+                                while (keys.hasNext()) {
+                                        String next = keys.next();
+                                        String nextValues = jsonObject.getString(next);
+                                        Element nextElement = doc.createElement(next);
+                                        nextElement.appendChild(doc.createTextNode(nextValues));
+                                        keyElement.appendChild(nextElement);
+                                       // keysElement.appendChild(nextElement);
+                                        System.out.println("next:\t" + next + "\tnextValues:\t" + nextValues);
+                                }
+                                keysElement.appendChild(keyElement);
+
+                        }
+                        documentElement.appendChild(keysElement);
+
+                }
+
+                System.out.println("attribute\t" + attribute);
+
+                TransformerFactory newTransformer = TransformerFactory.newInstance();
+                Transformer transformer = newTransformer.newTransformer();
+            
+                transformer.transform(new DOMSource(doc), new StreamResult(new File("C:/NetBeansProjects/xiamen/src/main/webapp/resouce/j.xml")));
         }
 }
