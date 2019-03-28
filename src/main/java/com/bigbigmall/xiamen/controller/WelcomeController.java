@@ -353,6 +353,7 @@ public class WelcomeController {
 		}
 		return sb.toString();
 	}
+
 	/**
 	 * 处理九九乘法表 3月21号
 	 *
@@ -389,6 +390,7 @@ public class WelcomeController {
 		}
 		return stu;
 	}
+
 	/**
 	 * 把九九乘法表转换成XSLT 3月24号
 	 *
@@ -402,18 +404,18 @@ public class WelcomeController {
 		JSONArray jsonArray = new JSONArray();
 		for (int i = 2; i <= 9; i++) {
 			for (int j = 1; j <= 9; j++) {
-				System.out.print(i + "*" + j + "=" + j * i + "\t");
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("k1", i);
 				jsonObject.put("k2", j);
 				jsonObject.put("k3", i * j);
 				jsonArray.put(jsonObject);
 			}
-			System.out.println("");
+
 		}
 		request.getSession().setAttribute("stu", jsonArray.toString());
 		return "forward:/XMLShow";
 	}
+
 	@RequestMapping(value = "/XMLShow")
 	public ModelAndView getshowXML(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -421,41 +423,14 @@ public class WelcomeController {
 		doc.appendChild(documentElement);
 		String attribute = (String) request.getSession().getAttribute("stu");
 		JSONArray jsonArray = new JSONArray(attribute);
-		for (int i = 0; i < 9; i++) {
-			Element keysElement = doc.createElement("keys");
-			Element element = getElement(jsonArray, i, 0, doc);
-			Element element1 = getElement(jsonArray, i, 9, doc);
-			Element element2 = getElement(jsonArray, i, 18, doc);
-			Element element3 = getElement(jsonArray, i, 27, doc);
-			keysElement.appendChild(element);
-			keysElement.appendChild(element1);
-			keysElement.appendChild(element2);
-			keysElement.appendChild(element3);
-			documentElement.appendChild(keysElement);
-		}
-		for (int i = 0; i < 9; i++) {
-			Element keysElement = doc.createElement("keys");
-			Element element = getElement(jsonArray, i, 36, doc);
-			Element element1 = getElement(jsonArray, i, 45, doc);
-			Element element2 = getElement(jsonArray, i, 54, doc);
-			Element element3 = getElement(jsonArray, i, 63, doc);
-			keysElement.appendChild(element);
-			keysElement.appendChild(element1);
-			keysElement.appendChild(element2);
-			keysElement.appendChild(element3);
-			documentElement.appendChild(keysElement);
-		}
-		System.out.println("attribute\t" + attribute);
+		createDom(jsonArray,doc,documentElement);
 		Source source = new DOMSource(doc);
-	
 		ModelAndView model = new ModelAndView("multiplication");
 		model.addObject("xmlSource", source);
 
 		return model;
-		
 
 	}
-
 
 	/**
 	 * 获得json 的key
@@ -487,10 +462,10 @@ public class WelcomeController {
 		Element keElement = doc.createElement("key");
 		String[] jsonValue = getjsonValue(objectJson.getJSONObject(i + pace));
 		String[] keyValuString = getKeyValuString(objectJson.getJSONObject(i + pace));
-		
+
 		for (int j = 0; j < jsonValue.length; j++) {
 
-			if ((jsonValue[j].equals("k3")&&keyValuString[j].equals("2")) || (jsonValue[j].equals("k3")&&keyValuString[j].equals("3")) ||( jsonValue[j].equals("k3")&&keyValuString[j].equals("5") )|| (jsonValue[j].equals("k3")&&keyValuString[j].equals("7"))) {
+			if ((jsonValue[j].equals("k3") && keyValuString[j].equals("2")) || (jsonValue[j].equals("k3") && keyValuString[j].equals("3")) || (jsonValue[j].equals("k3") && keyValuString[j].equals("5")) || (jsonValue[j].equals("k3") && keyValuString[j].equals("7"))) {
 				Element createElement1 = doc.createElement(jsonValue[j]);
 				createElement1.setAttribute("is", "prime");
 				String createElement1Text = objectJson.getJSONObject(i + pace).get(jsonValue[j]).toString();
@@ -508,10 +483,12 @@ public class WelcomeController {
 		return keElement;
 
 	}
+
 	/**
 	 * 返回所json对象的值
+	 *
 	 * @param jsonObj
-	 * @return 
+	 * @return
 	 */
 	public String[] getKeyValuString(JSONObject jsonObj) {
 		String[] arrValueString = new String[3];
@@ -523,6 +500,38 @@ public class WelcomeController {
 		}
 		return arrValueString;
 
+	}
+	/**
+	 * 创建dom
+	 * @param jsonArray
+	 * @param doc
+	 * @param documentElement 
+	 */
+	public void createDom( JSONArray jsonArray ,Document doc,Element documentElement){
+	for (int i = 0; i < 9; i++) {
+			Element keysElement = doc.createElement("keys");
+			Element element = getElement(jsonArray, i, 0, doc);
+			Element element1 = getElement(jsonArray, i, 9, doc);
+			Element element2 = getElement(jsonArray, i, 18, doc);
+			Element element3 = getElement(jsonArray, i, 27, doc);
+			keysElement.appendChild(element);
+			keysElement.appendChild(element1);
+			keysElement.appendChild(element2);
+			keysElement.appendChild(element3);
+			documentElement.appendChild(keysElement);
+		}
+		for (int i = 0; i < 9; i++) {
+			Element keysElement = doc.createElement("keys");
+			Element element = getElement(jsonArray, i, 36, doc);
+			Element element1 = getElement(jsonArray, i, 45, doc);
+			Element element2 = getElement(jsonArray, i, 54, doc);
+			Element element3 = getElement(jsonArray, i, 63, doc);
+			keysElement.appendChild(element);
+			keysElement.appendChild(element1);
+			keysElement.appendChild(element2);
+			keysElement.appendChild(element3);
+			documentElement.appendChild(keysElement);
+		}
 	}
 	
 
