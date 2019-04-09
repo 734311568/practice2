@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+
+
+		<title>三级联动Ajax</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<div id="div"></div>
+		<script>
+			$(document).ready(function () {
+				//alert("脚本被触发");
+				$("#div").html("<select id=\"sheng\"></select><select id=\"shi\"></select><select id=\"qu\"></select>");
+				//加载省的方法
+				sheng();
+				//加载市方法
+				shi();
+				//加载区
+				qu();
+				$("#sheng").change(function () {
+					shi();
+					qu();
+				});
+				$("#shi").change(function () {
+					qu();
+				});
+			});
+			function sheng() {
+				$.ajax({
+					url: "sanJiLianDong",
+					data: {id: "0"},
+					type: "get",
+					contentType: "application/json;charset=UTF-8",
+					success: function (data) {
+						var obj = JSON.parse(data);
+						var str = "";
+						for (var i = 0; i < obj.length; i++) {
+							str = str + "<option value = " + obj[i]["id"] + ">" + obj[i]["name"] + "</optiom>";
+							$("#sheng").html(str);
+						}
+					}
+				});
+			}
+			function shi() {
+				var idt = $("#sheng option:selected").val();
+				$.ajax({
+					url: "sanJiLianDong",
+					data: {id: idt},
+					type: "get",
+					contentType: "application/json;charset=UTF-8",
+					success: function (data) {
+						var obj = JSON.parse(data);
+						var str = "";
+						for (var i = 0; i < obj.length; i++) {
+							str = str + "<option value = " + obj[i]["id"] + ">" + obj[i]["name"] + "</optiom>";
+							$("#shi").html(str);
+						}
+					}
+				});
+
+			}
+			function qu() {
+				var idt = $("#shi option:selected").val();
+				$.ajax({
+					url: "sanJiLianDong",
+					data: {id: idt},
+					type: "get",
+					contentType: "application/json;charset=UTF-8",
+					success: function (data) {
+						var obj = JSON.parse(data);
+						var str = "";
+						for (var i = 0; i < obj.length; i++) {
+							str = str + "<option value = " + obj[i]["id"] + ">" + obj[i]["name"] + "</optiom>";
+							$("#qu").html(str);
+						}
+					}
+				});
+			}
+
+		</script>
+
+
+	</body>
+</html>

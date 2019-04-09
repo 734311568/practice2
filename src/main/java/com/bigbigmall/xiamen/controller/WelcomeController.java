@@ -38,6 +38,185 @@ import org.w3c.dom.Text;
 public class WelcomeController {
 
 	/**
+	 * 4月3号
+	 *
+	 * @param response
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/Personalpage")
+	@ResponseBody
+	public ModelAndView getPersonalpage(HttpServletResponse response, HttpServletRequest request) throws Exception {
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+		Element documentElement = doc.createElement("document");
+		doc.appendChild(documentElement);
+		CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("https://redan-api.herokuapp.com/personnels/search/findOneById?id=3"));
+		HttpEntity entity = response1.getEntity();
+		if (null != entity) {
+			String requetSteam = EntityUtils.toString(entity, "UTF-8");
+			JSONObject jsonObject = new JSONObject(requetSteam);
+			
+			createDoM(jsonObject, doc, documentElement);
+		}
+		Source source = new DOMSource(doc);
+		ModelAndView model = new ModelAndView("Personalpage");
+		model.addObject("xmlSource", source);
+		return model;
+	}
+
+	public void createDoM(JSONObject jsonObject, Document doc, Element element) {
+		Iterator<String> keys = jsonObject.keys();
+		while (keys.hasNext()) {
+			String next = keys.next();
+			System.out.println("next\t" + next);
+			//是文本的情况的直接就追加 
+			if (!next.equals("userStory")) {
+				switch (next) {
+					//是这个profileImgUrl节点  添加一个属性
+					case "profileImgUrl": {
+						Element nextElement = doc.createElement(next);
+						nextElement.setAttribute("pro", jsonObject.get(next).toString());
+						element.appendChild(nextElement);
+						break;
+					}
+					case "coverImgUrl": {
+						Element nextElement = doc.createElement(next);
+						nextElement.setAttribute("cover", jsonObject.get(next).toString());
+						element.appendChild(nextElement);
+						break;
+					}
+					default: {
+
+						Element nextElement = doc.createElement(next);
+						nextElement.appendChild(doc.createTextNode(jsonObject.get(next).toString()));
+						element.appendChild(nextElement);
+						break;
+					}
+				}
+			} else if (next.equals("userStory")) {
+				//解析userStory
+				JSONArray jsonArray = jsonObject.getJSONArray("userStory");
+				Element userStorysElement = doc.createElement("userStorys");
+				for (int i = 0; i < jsonArray.length(); i++) {
+					Element userStoryElementw = doc.createElement("userStory");
+					JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
+					Iterator<String> keys1 = jsonObjectUser.keys();
+					while (keys1.hasNext()) {
+						String next1 = keys1.next();
+						if (!("storyImage").equals(next1)) {
+							Element next1Element = doc.createElement(next1);
+							next1Element.appendChild(doc.createTextNode(jsonObjectUser.get(next1).toString()));
+
+							userStoryElementw.appendChild(next1Element);
+							userStorysElement.appendChild(userStoryElementw);
+							//创建storyImage节点
+						} else if (("storyImage").equals(next1)) {
+							String jsonObjectStoryImage = jsonObjectUser.get("storyImage").toString();
+							JSONObject jsonObjectImage= new JSONObject(jsonObjectStoryImage);
+							Iterator<String> keys2 = jsonObjectImage.keys();
+							while (keys2.hasNext()) {
+								String next2 = keys2.next();
+								Element next2Element = doc.createElement(next2);
+								String toString1 = jsonObjectImage.get(next2).toString();
+								if (("imgUrl").equals(next2)) {
+									Element next2Element2 = doc.createElement(next2);
+									String toString2 = jsonObjectImage.get("imgUrl").toString();
+									next2Element2.setAttribute("src", toString2);
+									userStoryElementw.appendChild(next2Element2);
+									userStorysElement.appendChild(userStoryElementw);
+								} else if (!("imgUrl").equals(next2)) {
+									next2Element.appendChild(doc.createTextNode(toString1));
+									userStoryElementw.appendChild(next2Element);
+									userStorysElement.appendChild(userStoryElementw);
+								}
+							}
+						}
+					}
+					element.appendChild(userStorysElement);
+				}
+			} else {
+				System.out.println("没有找到这个节点");
+			}
+		}
+	}
+
+	/**
+	 * 三级联动
+	 *
+	 * @param response
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/sanJiLianDong")
+	//@RequestBody
+	@ResponseBody
+	public String getsanJiLianDong(HttpServletResponse response, @RequestParam(value = "id", required = false) String id) throws Exception {
+
+		CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("http://192.168.101.8:31001/config/arr?nid=" + id));
+
+		HttpEntity entity = response1.getEntity();
+		String srtFirst = null;
+		if (null != entity) {
+			srtFirst = EntityUtils.toString(entity, "UTF-8");
+			System.out.println(srtFirst);
+		}
+		return srtFirst;
+	}
+
+	/**
+	 * 获取nid 的键
+	 *
+	 * @param jsarr
+	 * @return
+	 */
+	public String[] getNidKeys(JSONArray jsarr) {
+		String[] nid = new String[3];
+		for (int i = 0; i < jsarr.length(); i++) {
+			JSONObject jsonObject = jsarr.getJSONObject(i);
+			Iterator<String> keys = jsonObject.keys();
+			while (keys.hasNext()) {
+				String nextKey = keys.next();
+				if (nextKey.equals("nid")) {
+					nid[i] = nextKey;
+				}
+
+			}
+		}
+
+		return nid;
+
+	}
+
+	/**
+	 * 拿到这key 键对应的value
+	 *
+	 * @param jsarr
+	 * @return
+	 */
+	public String getkey(JSONArray jsarr) {
+		String values = null;
+		String[] nidKeys = getNidKeys(jsarr);
+
+		for (int i = 0; i < jsarr.length(); i++) {
+			JSONObject jsonObject = jsarr.getJSONObject(i);
+			Iterator<String> keys = jsonObject.keys();
+			while (keys.hasNext()) {
+				String next = keys.next();
+				if (nidKeys[i].equals(next)) {
+					//拿到nid 的值
+					String nidValue = jsonObject.get(nidKeys[i]).toString();
+					values = nidValue;
+				}
+
+			}
+		}
+		return values;
+
+	}
+
+	/**
 	 * js创建文本
 	 *
 	 * @param response
@@ -204,7 +383,7 @@ public class WelcomeController {
 	}
 
 	@RequestMapping("/showXML")
-	public void getView(HttpServletResponse response) throws ParserConfigurationException, IOException, TransformerConfigurationException, TransformerException {
+	public void getView(HttpServletResponse response) throws Exception {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		Element documentElement = doc.createElement("document");
 		doc.appendChild(documentElement);
@@ -423,7 +602,7 @@ public class WelcomeController {
 		doc.appendChild(documentElement);
 		String attribute = (String) request.getSession().getAttribute("stu");
 		JSONArray jsonArray = new JSONArray(attribute);
-		createDom(jsonArray,doc,documentElement);
+		createDom(jsonArray, doc, documentElement);
 		Source source = new DOMSource(doc);
 		ModelAndView model = new ModelAndView("multiplication");
 		model.addObject("xmlSource", source);
@@ -501,14 +680,16 @@ public class WelcomeController {
 		return arrValueString;
 
 	}
+
 	/**
 	 * 创建dom
+	 *
 	 * @param jsonArray
 	 * @param doc
-	 * @param documentElement 
+	 * @param documentElement
 	 */
-	public void createDom( JSONArray jsonArray ,Document doc,Element documentElement){
-	for (int i = 0; i < 9; i++) {
+	public void createDom(JSONArray jsonArray, Document doc, Element documentElement) {
+		for (int i = 0; i < 9; i++) {
 			Element keysElement = doc.createElement("keys");
 			Element element = getElement(jsonArray, i, 0, doc);
 			Element element1 = getElement(jsonArray, i, 9, doc);
@@ -533,6 +714,5 @@ public class WelcomeController {
 			documentElement.appendChild(keysElement);
 		}
 	}
-	
 
 }
