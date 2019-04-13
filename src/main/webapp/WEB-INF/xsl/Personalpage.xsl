@@ -7,12 +7,12 @@
 	<xsl:template match="//userStorys">
 		<div class="col-md-8 col-sm-6 col-xs-6 ">
 			<div class="row mt-1">
-		<xsl:for-each select="userStory"> 
+		<xsl:for-each select="userStory/storyImage"> 
 				
 					<div class="col-sm-4">
 						<div class="thumbnail">                         
 							<a href="#" class="">                               
-								<img src="{imgUrl/@src }" alt="..." class="caomei"/>
+								<img src="{imgUrl/@att }" alt="..." class="caomei"/>
 							</a>                                                
 						</div>
 					</div>
@@ -50,7 +50,7 @@
 							<div class="col-md-3 col-sm-3 col-xs-12 user-profil-part pull-left">
 								<div class="row ">
 									<div class="col-md-12 col-md-12-sm-12 col-xs-12 user-image text-center">
-										<img src="{profileImgUrl/@pro}" class="rounded-circle"/>
+										<img src="{profileImgUrl/@cover}" class="rounded-circle"/>
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 user-detail-section1 text-center">
 										<button id="btn-contact" click="clearModal()" data-toggle="modal" data-target="#contact" class="btn btn-success btn-block follow">加他好友</button>
@@ -59,29 +59,24 @@
 									<div class="d-flex justify-content-center">
 										<div class="col-md-12 col-sm-12 user-detail-section2 pull-left">
 											<p>追蹤者</p>
-											<span>320</span>
+											<span><xsl:value-of select="followerCount"/> </span>
 										</div>
 									</div>
 									<div class="d-flex justify-content-center">
 										<div class="col-md-12 col-sm-12 user-detail-section2 ">
 											<p>貼文</p>
-											<span>320</span>
+											<span><xsl:value-of select="userStoryCount"/></span>
 										</div>
 									</div>
 									<div class="d-flex justify-content-center">
 										<div class="col-md-12 col-sm-12 user-detail-section2 pull-right">
 											<p>追蹤中</p>
-											<span>320</span>
+											<span><xsl:value-of select="followingCount"/></span>
 										</div>
 									</div>
 									<div class="d-flex justify-content-center">
 
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-										tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-										quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-										consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-										cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-										proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+										<xsl:value-of select="profileText"/>
 
 									</div>
 
@@ -98,15 +93,7 @@
 												<h5>明星賣家</h5>
 											</div>
 											<xsl:apply-templates select="userStorys"/> 
-<!--											<div class="col-md-8 col-sm-6 col-xs-6 ">
-												<div class="row mt-1">
-													<xsl:apply-templates select="userStorys"/> 
-												</div>
-												<div class="row mt-1">
-													
-													<xsl:apply-templates select="userStorys"/> 
-												</div>
-											</div>-->
+
 										</div>
 									</div>
 

@@ -54,91 +54,86 @@ public class WelcomeController {
 		CloseableHttpResponse response1 = HttpClients.createDefault().execute(new HttpGet("https://redan-api.herokuapp.com/personnels/search/findOneById?id=3"));
 		HttpEntity entity = response1.getEntity();
 		if (null != entity) {
-			String requetSteam = EntityUtils.toString(entity, "UTF-8");
-			JSONObject jsonObject = new JSONObject(requetSteam);
-			
-			createDoM(jsonObject, doc, documentElement);
+			String getDataStr = EntityUtils.toString(entity, "UTF-8");
+			JSONObject jsonObjectDataStr = new JSONObject(getDataStr);
+
+			//创建nickname
+			Element nicknameElement = doc.createElement("nickname");
+			String nicknameString = jsonObjectDataStr.get("nickname").toString();
+			nicknameElement.appendChild(doc.createTextNode(nicknameString));
+			documentElement.appendChild(nicknameElement);
+
+			//创建followingCount
+			Element followingCountElement = doc.createElement("followingCount");
+			String followingCountString = jsonObjectDataStr.get("followingCount").toString();
+			followingCountElement.appendChild(doc.createTextNode(followingCountString));
+			documentElement.appendChild(followingCountElement);
+
+			//创建followerCount
+			Element followerCountElement = doc.createElement("followerCount");
+			String followerCountString = jsonObjectDataStr.get("followerCount").toString();
+			followerCountElement.appendChild(doc.createTextNode(followerCountString));
+			documentElement.appendChild(followerCountElement);
+
+			//创建userStoryCount
+			Element userStoryCountElement = doc.createElement("userStoryCount");
+			String userStoryCountString = jsonObjectDataStr.get("userStoryCount").toString();
+			userStoryCountElement.appendChild(doc.createTextNode(userStoryCountString));
+			documentElement.appendChild(userStoryCountElement);
+
+			//创建coverImgUrl
+			Element coverImgUrlElement = doc.createElement("coverImgUrl");
+			String coverImgUrlString = jsonObjectDataStr.get("coverImgUrl").toString();
+			coverImgUrlElement.setAttribute("cover", coverImgUrlString);
+			documentElement.appendChild(coverImgUrlElement);
+
+			//创建profileImgUrl
+			Element profileImgUrlElement = doc.createElement("profileImgUrl");
+			String profileImgUrlString = jsonObjectDataStr.get("profileImgUrl").toString();
+			profileImgUrlElement.setAttribute("cover", profileImgUrlString);
+			documentElement.appendChild(profileImgUrlElement);
+
+			//创建profileText
+			Element profileTextUrlElement = doc.createElement("profileText");
+			String profileTextString = jsonObjectDataStr.get("profileText").toString();
+			profileTextUrlElement.appendChild(doc.createTextNode(profileTextString));
+			documentElement.appendChild(profileTextUrlElement);
+
+			//创建cuserStory  第一层
+			JSONArray jsonArrayUserStorys = jsonObjectDataStr.getJSONArray("userStory");
+
+			Element userStoryElement = doc.createElement("userStorys");
+
+			for (int i = 0; i < jsonArrayUserStorys.length(); i++) {
+				Element userElement = doc.createElement("userStory");
+				JSONObject jsonObjectUserStory = jsonArrayUserStorys.getJSONObject(i);
+				System.out.println("jsonObjectUserStory\t" + jsonObjectUserStory);
+
+				//创建storyImage  第二层
+				JSONObject jsonObjectStoryImage = jsonObjectUserStory.getJSONObject("storyImage");
+				Element storyImageElement = doc.createElement("storyImage");
+				userElement.appendChild(storyImageElement);
+
+				//创建 imgUrl 第三层
+				String imgUrlString = jsonObjectStoryImage.get("imgUrl").toString();
+				Element imgUrlElement = doc.createElement("imgUrl");
+				imgUrlElement.setAttribute("att", imgUrlString);
+				storyImageElement.appendChild(imgUrlElement);
+
+				userElement.appendChild(storyImageElement);
+				userStoryElement.appendChild(userElement);
+			}
+			documentElement.appendChild(userStoryElement);
+
 		}
 		Source source = new DOMSource(doc);
 		ModelAndView model = new ModelAndView("Personalpage");
 		model.addObject("xmlSource", source);
 		return model;
-	}
-
-	public void createDoM(JSONObject jsonObject, Document doc, Element element) {
-		Iterator<String> keys = jsonObject.keys();
-		while (keys.hasNext()) {
-			String next = keys.next();
-			System.out.println("next\t" + next);
-			//是文本的情况的直接就追加 
-			if (!next.equals("userStory")) {
-				switch (next) {
-					//是这个profileImgUrl节点  添加一个属性
-					case "profileImgUrl": {
-						Element nextElement = doc.createElement(next);
-						nextElement.setAttribute("pro", jsonObject.get(next).toString());
-						element.appendChild(nextElement);
-						break;
-					}
-					case "coverImgUrl": {
-						Element nextElement = doc.createElement(next);
-						nextElement.setAttribute("cover", jsonObject.get(next).toString());
-						element.appendChild(nextElement);
-						break;
-					}
-					default: {
-
-						Element nextElement = doc.createElement(next);
-						nextElement.appendChild(doc.createTextNode(jsonObject.get(next).toString()));
-						element.appendChild(nextElement);
-						break;
-					}
-				}
-			} else if (next.equals("userStory")) {
-				//解析userStory
-				JSONArray jsonArray = jsonObject.getJSONArray("userStory");
-				Element userStorysElement = doc.createElement("userStorys");
-				for (int i = 0; i < jsonArray.length(); i++) {
-					Element userStoryElementw = doc.createElement("userStory");
-					JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
-					Iterator<String> keys1 = jsonObjectUser.keys();
-					while (keys1.hasNext()) {
-						String next1 = keys1.next();
-						if (!("storyImage").equals(next1)) {
-							Element next1Element = doc.createElement(next1);
-							next1Element.appendChild(doc.createTextNode(jsonObjectUser.get(next1).toString()));
-
-							userStoryElementw.appendChild(next1Element);
-							userStorysElement.appendChild(userStoryElementw);
-							//创建storyImage节点
-						} else if (("storyImage").equals(next1)) {
-							String jsonObjectStoryImage = jsonObjectUser.get("storyImage").toString();
-							JSONObject jsonObjectImage= new JSONObject(jsonObjectStoryImage);
-							Iterator<String> keys2 = jsonObjectImage.keys();
-							while (keys2.hasNext()) {
-								String next2 = keys2.next();
-								Element next2Element = doc.createElement(next2);
-								String toString1 = jsonObjectImage.get(next2).toString();
-								if (("imgUrl").equals(next2)) {
-									Element next2Element2 = doc.createElement(next2);
-									String toString2 = jsonObjectImage.get("imgUrl").toString();
-									next2Element2.setAttribute("src", toString2);
-									userStoryElementw.appendChild(next2Element2);
-									userStorysElement.appendChild(userStoryElementw);
-								} else if (!("imgUrl").equals(next2)) {
-									next2Element.appendChild(doc.createTextNode(toString1));
-									userStoryElementw.appendChild(next2Element);
-									userStorysElement.appendChild(userStoryElementw);
-								}
-							}
-						}
-					}
-					element.appendChild(userStorysElement);
-				}
-			} else {
-				System.out.println("没有找到这个节点");
-			}
-		}
+//
+//		TransformerFactory newTransformer = TransformerFactory.newInstance();
+//		Transformer transformer = newTransformer.newTransformer();
+//		transformer.transform(new DOMSource(doc), new StreamResult(response.getOutputStream()));
 	}
 
 	/**
